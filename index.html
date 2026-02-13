@@ -377,9 +377,9 @@
         }
 
         .price-small {
-            font-size: 11px;
+            font-size: 14px;
             color: #a0d0a0;
-            font-weight: 400;
+            font-weight: 100;
         }
 
         /* ===== МОДАЛЬНОЕ ОКНО ===== */
@@ -495,7 +495,7 @@
         <!-- СТАТИСТИКА: Подписчики и Доллары -->
         <div class="stats-row">
             <div class="subs-block">
-                <div class="subs-icon">📺</div>
+                <div class="subs-icon">👥</div>
                 <div class="subs-info">
                     <div class="subs-label">ПОДПИСЧИКИ</div>
                     <div class="subs-value" id="subsDisplay">0</div>
@@ -540,13 +540,13 @@
         <!-- ПРЕСТИЖ: НОВОЕ НАПРАВЛЕНИЕ -->
         <div class="prestige-section">
             <div class="prestige-title">
-                <h3>🔥 НОВЫЙ ФОРМАТ</h3>
+                <h3>🔥 СМЕНИТЬ ФОРМАТ</h3>
                 <span style="color:#ffd700;" id="nextContentPreview">Откроется: ВыTab</span>
             </div>
             <button class="prestige-button" id="prestigeButton">
                 ⚡ ОСВОИТЬ ФОРМАТ
                 <span style="background:rgba(0,0,0,0.3); padding:4px 12px; border-radius:40px;" id="prestigeCostDisplay">
-                    1000 📺
+                    1000 👥
                 </span>
             </button>
             <p style="font-size:12px; color:#a0e0a0; text-align:center;">
@@ -558,7 +558,6 @@
         <div>
             <div class="content-title">
                 🎬 КОНТЕНТ-СТУДИЯ
-                <span style="font-size:13px; color:#a0e0a0;">(навсегда с вами)</span>
             </div>
             <div class="content-list" id="contentContainer">
                 <!-- Динамическая отрисовка -->
@@ -588,6 +587,32 @@
                 <button class="close-modal" id="closeModalBtn">
                     ✕ ЗАКРЫТЬ
                 </button>
+                <div style="margin-top: 20px; border-top: 1px solid #2a5a2a; padding-top: 16px;">
+                    <h3 style="color: #ff6b6b; margin-bottom: 12px;">⚠️ ОПАСНАЯ ЗОНА</h3>
+                    <button class="reset-button" id="resetGameBtn" style="
+                        background: linear-gradient(145deg, #4a1a1a, #2a0a0a);
+                        border: none;
+                        border-bottom: 6px solid #6b2a2a;
+                        color: white;
+                        font-weight: 700;
+                        font-size: 16px;
+                        padding: 12px 24px;
+                        border-radius: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 12px;
+                        box-shadow: 0 6px 0 #3a1a1a, 0 0 15px #ff0000;
+                        width: 100%;
+                        cursor: pointer;
+                        touch-action: auto;
+                    ">
+                        🧹 ПОЛНЫЙ СБРОС ПРОГРЕССА
+                    </button>
+                    <p style="color: #ffaaaa; font-size: 11px; text-align: center; margin-top: 8px;">
+                        ⚡ Всё будет удалено без возможности восстановления!
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -625,7 +650,7 @@
                     baseSubsPrice: 100,
                     baseCashPrice: 0,
                     subsPerSec: 0,
-                    cashPerSec: 0.05,
+                    cashPerSec: 0.01,
                     clickBonus: 1,
                     multiplierTarget: null,
                     count: 0,
@@ -923,7 +948,7 @@
                 
                 // Престиж кнопка
                 const prestigeCost = getPrestigeCost();
-                document.getElementById('prestigeCostDisplay').innerHTML = `${prestigeCost.toLocaleString()} 📺`;
+                document.getElementById('prestigeCostDisplay').innerHTML = `${prestigeCost.toLocaleString()} 👥`;
                 document.getElementById('nextContentPreview').innerHTML = `→ ${getNextContentName()}`;
                 document.getElementById('prestigeButton').disabled = subscribers < prestigeCost || prestigeLevel >= contentUnlocks.length - 1;
                 
@@ -959,7 +984,7 @@
                             <button class="content-price" 
                                     data-content-id="${content.id}"
                                     ${!canAfford ? 'disabled' : ''}>
-                                💎 ${price.subs} 📺
+                                💎 ${price.subs} 👥
                                 ${price.cash > 0 ? `<br><span class="price-small">$${price.cash.toFixed(2)}</span>` : ''}
                                 <span class="price-small">улучшить</span>
                             </button>
@@ -1000,7 +1025,6 @@
 
             function handleClick() {
                 subscribers += clickPower * globalBonus + clickBonus;
-                cash += 0.01 * globalBonus;
                 renderGame();
                 saveGame();
             }
@@ -1015,6 +1039,71 @@
                 renderGame();
             }
 
+            function resetGame() {
+                // Модальное окно подтверждения
+                if (!confirm('🚨 ТОЧНО СБРОСИТЬ?\n\nВсе подписчики, доллары, Гле-лмазы, уровни контента и образы будут удалены навсегда!')) {
+                    return;
+                }
+                
+                // Двойное подтверждение для безопасности
+                if (!confirm('😱 Последнее предупреждение!\n\nВы уверены, что хотите начать с нуля?')) {
+                    return;
+                }
+                
+                // ===== СБРАСЫВАЕМ ВСЁ =====
+                
+                // 1. Ресурсы
+                subscribers = 0;
+                cash = 0;
+                gems = 0;
+                prestigeLevel = 0;
+                globalBonus = 1.0;
+                clickPower = 1;
+                
+                // 2. Контент (обнуляем уровни)
+                contentItems.forEach(content => {
+                    content.count = 0;
+                });
+                
+                // 3. Форматы (оставляем только YouTab)
+                contentUnlocks.forEach((unlock, index) => {
+                    unlock.unlocked = index === 0; // Только первый разблокирован
+                });
+                
+                // 4. Скины (оставляем только базовый)
+                skins.forEach((skin, index) => {
+                    skin.owned = index === 0; // Только первый owned
+                });
+                
+                // 5. Текущий образ
+                currentSkin = skins[0];
+                globalBonus = currentSkin.bonus;
+                
+                // 6. Обновляем интерфейс
+                document.getElementById('avatarEmoji').innerText = currentSkin.emoji;
+                document.getElementById('modalAvatar').innerText = currentSkin.emoji;
+                document.getElementById('characterName').innerText = `${currentSkin.name} Глеб`;
+                document.getElementById('characterBonus').innerHTML = `+${((currentSkin.bonus - 1) * 100).toFixed(0)}% к доходу`;
+                
+                // 7. Пересчёт всего
+                recalcPassiveIncome();
+                recalcClickPower();
+                
+                // 8. Рендер
+                renderGame();
+                renderModal();
+                
+                // 9. Удаляем сохранение
+                localStorage.removeItem(SAVE_KEY);
+                
+                // 10. Визуальный фидбек
+                alert('✅ Прогресс сброшен. Удачи заново!');
+                
+                // Хептик если есть
+                if (window.Telegram?.WebApp?.HapticFeedback) {
+                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                }
+            }
             // ============ ИНИЦИАЛИЗАЦИЯ ============
             window.addEventListener('load', () => {
                 // Telegram
@@ -1049,6 +1138,11 @@
                 
                 document.getElementById('closeModalBtn').addEventListener('click', () => {
                     document.getElementById('characterModal').classList.remove('active');
+                });
+                 document.addEventListener('click', function(e) {
+                    if (e.target.id === 'resetGameBtn') {
+                        resetGame();
+                    }
                 });
                 
                 // Глобальные обработчики для скинов
