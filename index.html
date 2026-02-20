@@ -7,192 +7,330 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Гле-Стрим · Симулятор стримера</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
+    
     <style>
-        /* ========== ПОЛНЫЙ ОПТИМИЗИРОВАННЫЙ CSS ПОД МОБИЛКИ ========== */
+        /* ========== CYBER-STREAMER VISUAL REWORK ========== */
+:root {
+    --bg-main: #0f0f1a;
+    --bg-card: rgba(22, 22, 35, 0.85);
+    --accent-pink: #ff2d75;
+    --accent-blue: #2df7ff;
+    --accent-gold: #ffd700;
+    --accent-green: #00ff9d;
+    --text-main: #ffffff;
+    --text-muted: #8a8ba3;
+    --border-glow: rgba(255, 255, 255, 0.1);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background: radial-gradient(circle at top, #0a1a0a, #030803);
+    background-color: var(--bg-main);
+    /* Animated background gradient */
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(255, 45, 117, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(45, 247, 255, 0.1) 0%, transparent 50%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative Grid Background */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .game-container {
-    max-width: 480px;
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
     width: 100%;
-    background: rgba(10, 20, 10, 0.9);
-    backdrop-filter: blur(10px);
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 24px;
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.1);
-    padding: 16px 14px;
-    border: 1px solid #2a4a2a;
+    border: var(--glass-border);
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    box-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* ===== СТАТИСТИКА - КОМПАКТНАЯ ===== */
+/* ===== HEADER STATS ===== */
 .stats-row {
     display: grid;
-    grid-template-columns: 1.8fr 1fr;
-    gap: 8px;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 12px;
     width: 100%;
 }
 
-.subs-block {
-    background: #0e1a0e;
-    border: 1.5px solid #3a7a3a;
-    border-radius: 18px;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-}
-
-.subs-icon {
-    background: #1a3a1a;
-    width: 40px;
-    height: 40px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    border-bottom: 3px solid #0a2e0a;
-    flex-shrink: 0;
-}
-
-.subs-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.subs-label {
-    font-size: 11px;
-    color: #8bc34a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.subs-value {
-    font-size: 26px;
-    font-weight: 800;
-    color: #c8ffb0;
-    line-height: 1;
-    text-shadow: 0 0 8px #00aa00;
-    white-space: nowrap;
+.stat-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px;
+    border: var(--glass-border);
+    position: relative;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.cash-block {
-    background: #0e1a0e;
-    border: 1.5px solid #ffd700;
-    border-radius: 18px;
-    padding: 8px 12px;
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.subs-block { border-left: 3px solid var(--accent-pink); }
+.cash-block { border-left: 3px solid var(--accent-gold); }
+
+.stat-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    min-width: 0;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
-.cash-icon {
-    font-size: 22px;
-    flex-shrink: 0;
+.stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.stat-value {
+    font-family: 'Russo One', sans-serif;
+    font-size: 32px;
+    color: var(--text-main);
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .cash-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: #ffd700;
-    text-shadow: 0 0 8px #aa8800;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: 'Russo One', sans-serif;
+    font-size: 26px;
+    color: var(--accent-gold);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
-.cash-block span:last-child {
-    flex-shrink: 0;
-    font-size: 13px;
+.cash-suffix {
+    font-size: 18px;
+    color: rgba(255, 215, 0, 0.7);
+    margin-left: 2px;
 }
 
-/* ===== КЛИКЕР ===== */
+/* ===== MAIN CLICK BUTTON ===== */
 .click-area {
     display: flex;
     justify-content: center;
-    margin: 0;
+    padding: 10px 0;
+    position: relative;
 }
 
 .click-btn {
-    background: linear-gradient(145deg, #1a4a1a, #0a2a0a);
-    border: none;
-    border-bottom: 5px solid #00aa00;
-    color: white;
-    font-size: 22px;
-    font-weight: 700;
-    padding: 14px 30px;
-    border-radius: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: 0 6px 0 #004400, 0 0 25px #00aa00;
+    position: relative;
     width: 100%;
-    max-width: 280px;
-    letter-spacing: 1.5px;
-    transition: all 0.05s ease;
-    touch-action: auto;
-    min-height: 52px;
+    max-width: 300px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ff2d75, #ff5f3a);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Russo One', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 
+        0 10px 25px rgba(255, 45, 117, 0.4),
+        inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+    overflow: hidden;
+}
+
+/* Shine effect */
+.click-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+    z-index: 1;
 }
 
 .click-btn:active {
-    transform: translateY(5px);
-    box-shadow: 0 1px 0 #004400, 0 0 35px #00ff00;
-    border-bottom-width: 1px;
+    transform: scale(0.95) translateY(2px);
+    box-shadow: 0 5px 15px rgba(255, 45, 117, 0.4);
 }
 
-/* ===== ПАССИВНЫЙ ДОХОД ===== */
+.click-btn:active::before {
+    left: 100%;
+}
+
+.click-btn span {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Live pulse dot */
+.live-dot {
+    width: 10px; height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse-live 1.5s infinite;
+}
+
+@keyframes pulse-live {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Floating numbers container */
+.floating-container {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.float-text {
+    position: absolute;
+    font-family: 'Russo One', sans-serif;
+    font-size: 24px;
+    color: white;
+    text-shadow: 0 0 5px var(--accent-blue);
+    animation: floatUp 0.8s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+}
+
+/* ===== PASSIVE INCOME BAR ===== */
 .passive-stats {
-    background: #0e1a0e;
-    border-radius: 16px;
-    padding: 10px 14px;
+    background: rgba(45, 247, 255, 0.05);
+    border: 1px solid rgba(45, 247, 255, 0.2);
+    border-radius: 12px;
+    padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #2a5a2a;
-    color: #a0e0a0;
-    font-size: 14px;
+    color: var(--accent-blue);
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .per-second {
-    background: #1a3a1a;
-    color: #d4ff78;
-    padding: 5px 16px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 15px;
-    border: 1px solid #7ac77a;
-    box-shadow: 0 0 8px #00aa00;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(45, 247, 255, 0.3);
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(45, 247, 255, 0.1);
 }
 
-/* ===== ПРЕСТИЖ ===== */
-.prestige-section {
-    background: linear-gradient(145deg, #0e2a0e, #051005);
+/* ===== CHARACTER SECTION ===== */
+.character-section {
+    background: linear-gradient(90deg, rgba(45, 50, 100, 0.4), rgba(20, 20, 30, 0.6));
     border-radius: 20px;
-    padding: 14px;
-    border: 1.5px solid #d4af37;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(160, 120, 255, 0.3);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.character-section:active {
+    transform: scale(0.98);
+}
+
+.character-avatar {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 15px rgba(106, 17, 203, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.character-info {
+    flex: 1;
+    margin-left: 14px;
+}
+
+.character-name {
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+}
+
+.character-bonus {
+    font-size: 12px;
+    color: var(--accent-blue);
+    margin-top: 2px;
+}
+
+.gem-indicator {
+    background: rgba(0, 255, 157, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(0, 255, 157, 0.3);
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ===== PRESTIGE SECTION ===== */
+.prestige-section {
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.05), rgba(20, 20, 30, 0.8));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -200,141 +338,97 @@ body {
 
 .prestige-title {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    color: #ffd700;
+    align-items: center;
 }
 
 .prestige-title h3 {
-    font-size: 20px;
-    font-weight: 800;
-    text-shadow: 0 0 8px #aa8800;
+    font-family: 'Russo One', sans-serif;
+    font-size: 16px;
+    color: var(--accent-gold);
+    text-transform: uppercase;
 }
 
 .prestige-button {
-    background: linear-gradient(145deg, #d4af37, #9e8b3c);
+    background: linear-gradient(135deg, #ffc107, #ff9800);
     border: none;
-    border-bottom: 5px solid #6b5a2a;
-    color: #0a1a0a;
+    border-radius: 16px;
+    padding: 14px;
+    color: #000;
     font-weight: 800;
-    font-size: 18px;
-    padding: 12px 20px;
-    border-radius: 18px;
+    font-size: 14px;
+    text-transform: uppercase;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     gap: 10px;
-    box-shadow: 0 5px 0 #4a3a1a, 0 0 18px #ffd700;
-    transition: all 0.05s;
-    width: 100%;
-    min-height: 48px;
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+    transition: transform 0.1s;
 }
 
 .prestige-button:active {
-    transform: translateY(5px);
-    box-shadow: 0 1px 0 #4a3a1a, 0 0 25px #ffff00;
-    border-bottom-width: 1px;
+    transform: scale(0.96);
 }
 
 .prestige-button:disabled {
-    opacity: 0.5;
+    background: #333;
+    color: #666;
     box-shadow: none;
     transform: none;
-    pointer-events: none;
 }
 
-/* ===== ПЕРСОНАЖ ===== */
-.character-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #0e1a0e;
-    border-radius: 18px;
-    padding: 8px 14px;
-    border: 1.5px solid #7a3a7a;
-    cursor: pointer;
-    min-height: 52px;
-}
-
-.character-avatar {
-    background: linear-gradient(145deg, #2a1a2a, #1a0a1a);
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    border: 2px solid #c8a0ff;
-    box-shadow: 0 0 15px #aa88ff;
-    flex-shrink: 0;
-}
-
-.character-info {
-    flex: 1;
-    margin-left: 12px;
-    color: #e0c0ff;
-    min-width: 0;
-}
-
-.character-name {
-    font-weight: 700;
-    font-size: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.character-bonus {
+.prestige-cost-badge {
+    background: rgba(0,0,0,0.2);
+    padding: 4px 10px;
+    border-radius: 8px;
     font-size: 12px;
-    color: #d0a0ff;
 }
 
-.gem-indicator {
-    background: #1a2a4a;
-    padding: 6px 12px;
-    border-radius: 30px;
-    color: #aad4ff;
-    border: 1px solid #5a9aff;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-/* ===== КОНТЕНТ ===== */
+/* ===== CONTENT LIST ===== */
 .content-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #a0e0a0;
+    font-family: 'Russo One', sans-serif;
+    font-size: 16px;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
-    gap: 8px;
-    border-bottom: 2px solid #2a5a2a;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
+    gap: 10px;
 }
 
 .content-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 320px;
+    max-height: 300px;
     overflow-y: auto;
-    padding-right: 2px;
+    padding-right: 4px;
+}
+
+/* Scrollbar Styling */
+.content-list::-webkit-scrollbar {
+    width: 4px;
+}
+.content-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
 }
 
 .content-item {
-    background: #0e1a0e;
-    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     padding: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1.5px solid #2a5a2a;
-    transition: all 0.1s;
-    gap: 10px;
+    transition: background 0.2s;
+}
+
+.content-item:active {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .content-info {
@@ -344,94 +438,89 @@ body {
 
 .content-name {
     font-weight: 700;
-    font-size: 16px;
-    color: #e0ffe0;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
-    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .level-badge {
-    background: #1a4a1a;
-    border-radius: 30px;
-    padding: 3px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #c8ffa0;
-    border: 1px solid #5a9a5a;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 6px;
+    background-color: rgba(45, 247, 255, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(45, 247, 255, 0.2);
+    /* Fix text fill for compatibility */
+    -webkit-text-fill-color: #fff; 
+    color: #fff;
 }
 
 .content-effects {
-    font-size: 12px;
-    color: #b0dab0;
     display: flex;
-    gap: 8px;
     flex-wrap: wrap;
+    gap: 6px;
 }
 
 .effect-badge {
-    background: #1a2a1a;
-    padding: 3px 10px;
-    border-radius: 30px;
-    font-weight: 500;
-    border: 1px solid #5a8a5a;
-    font-size: 11px;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 .content-price {
-    background: linear-gradient(145deg, #1e4a1e, #0a2e0a);
-    color: #ffd700;
-    padding: 8px 12px;
-    border-radius: 16px;
-    font-weight: 700;
-    font-size: 15px;
+    background: var(--accent-green);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 800;
+    font-size: 13px;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 255, 157, 0.2);
+    transition: transform 0.1s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 90px;
-    text-align: center;
-    border: none;
-    border-bottom: 4px solid #004400;
-    transition: all 0.05s;
-    cursor: pointer;
-    min-height: 52px;
+    justify-content: center;
 }
 
 .content-price:active {
-    transform: translateY(4px);
-    border-bottom-width: 2px;
+    transform: scale(0.9);
 }
 
 .content-price:disabled {
-    opacity: 0.5;
+    background: #2a2a3a;
+    color: #555;
+    box-shadow: none;
     transform: none;
-    pointer-events: none;
 }
 
 .price-small {
-    font-size: 11px;
-    color: #a0d0a0;
-    font-weight: 400;
+    font-size: 9px;
+    opacity: 0.8;
+    font-weight: 600;
 }
 
-/* ===== МОДАЛКА ===== */
+/* ===== MODAL ===== */
 .modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(8px);
-    align-items: center;
-    justify-content: center;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 10, 20, 0.9);
+    backdrop-filter: blur(10px);
     z-index: 1000;
-    padding: 12px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
 .modal.active {
@@ -439,273 +528,162 @@ body {
 }
 
 .modal-content {
-    background: linear-gradient(145deg, #1a2a1a, #0a1a0a);
-    border-radius: 28px;
-    padding: 20px;
-    max-width: 400px;
+    background: #161622;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 24px;
     width: 100%;
-    border: 2px solid #c8a0ff;
-    box-shadow: 0 0 40px #aa88ff;
-    margin: auto;
+    max-width: 360px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
 .character-showcase {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
 }
 
 .big-avatar {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(145deg, #2a1a2a, #1a0a1a);
-    border-radius: 50px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 60px;
-    border: 4px solid #e0c0ff;
-    box-shadow: 0 0 35px #d0a0ff;
+    font-size: 50px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    box-shadow: 0 0 30px rgba(37, 117, 252, 0.3);
+    border: 3px solid rgba(255,255,255,0.2);
+}
+
+.modal h2 {
+    font-family: 'Russo One', sans-serif;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.modal h3 {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .skins-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 16px 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .skin-item {
-    background: #0e1a0e;
-    border: 1.5px solid #3a3a7a;
-    border-radius: 16px;
-    padding: 12px 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 4px;
     cursor: pointer;
-    min-height: 90px;
+    transition: all 0.2s;
+    height: 70px;
 }
 
 .skin-item.owned {
-    border-color: #ffd700;
-    background: #1a2a1a;
-    box-shadow: 0 0 10px #ffd700;
+    border-color: var(--accent-green);
+    background: rgba(0, 255, 157, 0.05);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.1);
 }
 
-.skin-icon {
-    font-size: 32px;
-}
-
-.skin-price {
-    font-size: 13px;
-    color: #aad4ff;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-}
+.skin-icon { font-size: 24px; }
+.skin-name { font-size: 9px; color: #ccc; text-align: center; }
+.skin-price { font-size: 10px; color: var(--accent-green); font-weight: 700; }
 
 .close-modal {
-    background: #3a1a1a;
-    color: white;
+    background: #333;
     border: none;
-    border-bottom: 4px solid #5a2a2a;
-    padding: 12px 20px;
-    border-radius: 18px;
-    font-weight: 700;
+    color: white;
     width: 100%;
-    margin-top: 8px;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
-    min-height: 48px;
+    transition: background 0.2s;
 }
+
+.close-modal:active { background: #444; }
 
 .reset-button {
-    background: linear-gradient(145deg, #4a1a1a, #2a0a0a);
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
     border: none;
-    border-bottom: 5px solid #6b2a2a;
     color: white;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 12px 20px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    box-shadow: 0 5px 0 #3a1a1a, 0 0 12px #ff0000;
+    padding: 12px;
+    border-radius: 12px;
     width: 100%;
+    font-weight: 700;
+    margin-top: 16px;
     cursor: pointer;
-    touch-action: auto;
-    min-height: 48px;
+    box-shadow: 0 5px 15px rgba(255, 65, 108, 0.2);
 }
 
-.reset-button:active {
-    transform: translateY(5px);
-    box-shadow: 0 1px 0 #3a1a1a, 0 0 20px #ff0000;
-    border-bottom-width: 1px;
-}
-
-/* ===== СКРОЛЛ ===== */
-::-webkit-scrollbar {
-    width: 2px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #2a5a2a;
-    border-radius: 2px;
-}
-
-/* ===== МЕДИА ЗАПРОСЫ ===== */
-@media (max-width: 400px) {
-    .game-container {
-        padding: 14px 12px;
-        gap: 12px;
-    }
-
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
-
-    .subs-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-    }
-
-    .subs-value {
-        font-size: 24px;
-    }
-
-    .cash-value {
-        font-size: 20px;
-    }
-
-    .click-btn {
-        font-size: 20px;
-        padding: 12px 24px;
-        max-width: 260px;
-        min-height: 48px;
-    }
-
-    .prestige-title h3 {
-        font-size: 18px;
-    }
-
-    .prestige-button {
-        font-size: 17px;
-        padding: 11px 18px;
-    }
-
-    .character-avatar {
-        width: 44px;
-        height: 44px;
-        font-size: 26px;
-    }
-
-    .character-name {
-        font-size: 15px;
-    }
-
-    .gem-indicator {
-        padding: 5px 10px;
-        font-size: 13px;
-    }
-
-    .content-list {
-        max-height: 280px;
-    }
-}
-
-@media (max-width: 340px) {
-    .game-container {
-        padding: 12px 10px;
-        gap: 10px;
-    }
-
-    .subs-value {
-        font-size: 22px;
-    }
-
-    .click-btn {
-        font-size: 18px;
-        padding: 10px 20px;
-    }
-
-    .content-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .content-price {
-        width: 100%;
-        min-width: auto;
-    }
-
-    .skins-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ===== ЛАНДШАФТНАЯ ОРИЕНТАЦИЯ ===== */
-@media (max-height: 500px) and (orientation: landscape) {
-    .game-container {
-        max-height: 95vh;
-        overflow-y: auto;
-        padding: 12px;
-    }
-
-    .content-list {
-        max-height: 180px;
-    }
-
-    .modal-content {
-        max-height: 90vh;
-        overflow-y: auto;
-    }
+/* Responsive */
+@media (max-width: 360px) {
+    .stat-value { font-size: 26px; }
+    .cash-value { font-size: 22px; }
+    .click-btn { font-size: 18px; padding: 16px; }
+    .content-list { max-height: 220px; }
 }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="game-container">
-        <!-- СТАТИСТИКА: Подписчики и Доллары -->
+        <!-- СТАТИСТИКА -->
         <div class="stats-row">
-            <div class="subs-block">
-                <div class="subs-icon">👥</div>
-                <div class="subs-info">
-                    <div class="subs-label">ПОДПИСЧИКИ</div>
-                    <div class="subs-value" id="subsDisplay">0</div>
+            <div class="stat-card subs-block">
+                <div class="stat-header">
+                    <span style="font-size:12px">📺</span>
+                    <span class="stat-label">Подписчики</span>
                 </div>
+                <div class="stat-value" id="subsDisplay">0</div>
             </div>
-            <div class="cash-block">
-                <span class="cash-icon">💰</span>
-                <span class="cash-value" id="cashDisplay">0</span>
-                <span style="color:#ffd700; font-size:14px;">$</span>
+            <div class="stat-card cash-block">
+                <div class="stat-header">
+                    <span style="font-size:12px">💰</span>
+                    <span class="stat-label">Баланс</span>
+                </div>
+                <div class="cash-value">
+                    <span id="cashDisplay">0</span>
+                    <span class="cash-suffix">$</span>
+                </div>
             </div>
         </div>
 
-        <!-- КНОПКА КЛИКА: СТРИМ -->
+        <!-- КНОПКА КЛИКА -->
         <div class="click-area">
+            <!-- Container for visual floating numbers -->
+            <div class="floating-container" id="floatingContainer"></div>
             <button class="click-btn" id="clickButton">
-                🎥 СТРИМИТЬ +1
+                <span>
+                    <span class="live-dot"></span>
+                    СТРИМИТЬ
+                </span>
             </button>
         </div>
 
         <!-- ПАССИВНЫЙ ДОХОД -->
         <div class="passive-stats">
-            <span>📊 ПАССИВНЫЙ ДОХОД</span>
-            <span class="per-second" id="perSecondDisplay">
-                +0.00 $/сек
-            </span>
+            <span>📊 Пассивный доход</span>
+            <span class="per-second" id="perSecondDisplay">+0.00 $/сек</span>
         </div>
 
-        <!-- ПЕРСОНАЖ (открывает модалку) -->
+        <!-- ПЕРСОНАЖ -->
         <div class="character-section" id="characterButton">
-            <div class="character-avatar" id="avatarEmoji">
-                🎭
-            </div>
+            <div class="character-avatar" id="avatarEmoji">🎭</div>
             <div class="character-info">
                 <div class="character-name" id="characterName">Стример</div>
                 <div class="character-bonus" id="characterBonus">+0% к доходу</div>
@@ -715,81 +693,50 @@ body {
             </div>
         </div>
 
-        <!-- ПРЕСТИЖ: НОВОЕ НАПРАВЛЕНИЕ -->
+        <!-- ПРЕСТИЖ -->
         <div class="prestige-section">
             <div class="prestige-title">
-                <h3>🔥 СМЕНИТЬ ФОРМАТ</h3>
-                <span style="color:#ffd700;" id="nextContentPreview">Откроется: ВыTab</span>
+                <h3>🔥 Смена формата</h3>
+                <span style="color:var(--accent-blue); font-size:12px; font-weight:600;" id="nextContentPreview">Далее: YouTab</span>
             </div>
             <button class="prestige-button" id="prestigeButton">
-                ⚡ ОСВОИТЬ ФОРМАТ
-                <span style="background:rgba(0,0,0,0.3); padding:4px 12px; border-radius:40px;" id="prestigeCostDisplay">
-                    1000 👥
-                </span>
+                <span>⚡ ОСВОИТЬ ФОРМАТ</span>
+                <span class="prestige-cost-badge" id="prestigeCostDisplay">1000 👥</span>
             </button>
-            <p style="font-size:12px; color:#a0e0a0; text-align:center;">
-                💎 Новый формат даёт Гле-лмазы и открывает контент
-            </p>
         </div>
 
-        <!-- КОНТЕНТ (НЕ СБРАСЫВАЕТСЯ) -->
+        <!-- КОНТЕНТ -->
         <div>
             <div class="content-title">
                 🎬 КОНТЕНТ-СТУДИЯ
             </div>
             <div class="content-list" id="contentContainer">
-                <!-- Динамическая отрисовка -->
+                <!-- JS Rendered -->
             </div>
         </div>
     </div>
 
-    <!-- МОДАЛКА С ПЕРСОНАЖЕМ И ОБРАЗАМИ -->
+    <!-- МОДАЛКА -->
     <div class="modal" id="characterModal">
         <div class="modal-content">
             <div class="character-showcase">
-                <div class="big-avatar" id="modalAvatar">
-                    🎭
-                </div>
-                <h2 style="color:#e0c0ff;" id="modalName">Стример</h2>
-                <div style="color:#ffd700; font-size:20px; display:flex; gap:20px;">
+                <div class="big-avatar" id="modalAvatar">🎭</div>
+                <h2 id="modalName">Стример</h2>
+                <div style="color:var(--accent-gold); font-size:18px; display:flex; gap:15px; margin-bottom:20px;">
                     <span>💎 <span id="modalGems">0</span></span>
                 </div>
                 
                 <div style="width:100%;">
-                    <h3 style="color:#c0ffc0; margin-bottom:12px;">🎨 ОБРАЗЫ</h3>
+                    <h3>🎨 Образы</h3>
                     <div class="skins-grid" id="skinsContainer">
-                        <!-- Скины загружаются динамически -->
+                        <!-- JS Rendered -->
                     </div>
                 </div>
                 
-                <button class="close-modal" id="closeModalBtn">
-                    ✕ ЗАКРЫТЬ
-                </button>
-                <div style="margin-top: 20px; border-top: 1px solid #2a5a2a; padding-top: 16px;">
-                    <h3 style="color: #ff6b6b; margin-bottom: 12px;">⚠️ ОПАСНАЯ ЗОНА</h3>
-                    <button class="reset-button" id="resetGameBtn" style="
-                        background: linear-gradient(145deg, #4a1a1a, #2a0a0a);
-                        border: none;
-                        border-bottom: 6px solid #6b2a2a;
-                        color: white;
-                        font-weight: 700;
-                        font-size: 16px;
-                        padding: 12px 24px;
-                        border-radius: 20px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 12px;
-                        box-shadow: 0 6px 0 #3a1a1a, 0 0 15px #ff0000;
-                        width: 100%;
-                        cursor: pointer;
-                        touch-action: auto;
-                    ">
-                        🧹 ПОЛНЫЙ СБРОС ПРОГРЕССА
-                    </button>
-                    <p style="color: #ffaaaa; font-size: 11px; text-align: center; margin-top: 8px;">
-                        ⚡ Всё будет удалено без возможности восстановления!
-                    </p>
+                <button class="close-modal" id="closeModalBtn">ЗАКРЫТЬ</button>
+                
+                <div style="margin-top: 16px; width:100%;">
+                   <button class="reset-button" id="resetGameBtn">🧹 Сбросить прогресс</button>
                 </div>
             </div>
         </div>
@@ -800,17 +747,17 @@ body {
             "use strict";
 
             // ============ ИГРОВЫЕ ДАННЫЕ ============
-            let subscribers = 0;        // Подписчики (для престижа)
-            let cash = 0;              // Доллары (валюта)
-            let gems = 0;             // Гле-лмазы (для образов)
-            let prestigeLevel = 0;     // Уровень престижа (форматы)
-            let passiveCashPerSec = 0; // Пассивный доход $/сек
-            let passiveSubsPerSec = 0; // Пассивные подписчики/сек
+            let subscribers = 0;        
+            let cash = 0;              
+            let gems = 0;             
+            let prestigeLevel = 0;     
+            let passiveCashPerSec = 0; 
+            let passiveSubsPerSec = 0; 
             let clickBonus = 0;
-            let clickPower = 1;        // Сила клика
-            let globalBonus = 1.0;     // Множитель дохода от образов
+            let clickPower = 1;        
+            let globalBonus = 1.0;     
 
-            // ============ ОТКРЫТЫЕ ФОРМАТЫ (ПРЕСТИЖ) ============
+            // ============ КОНФИГ (Не менялся) ============
             const contentUnlocks = [
                 { id: 'youtab', name: '📹 YouTab', unlocked: true, subsReq: 0 },
                 { id: 'tegigram', name: '📱 Tegigram', unlocked: false, subsReq: 500 },
@@ -819,129 +766,84 @@ body {
                 { id: 'spofifi', name: '🎧 Spofifi', unlocked: false, subsReq: 10000 }
             ];
 
-            // ============ КОНТЕНТ (НЕ СБРАСЫВАЕТСЯ!) ============
             const contentItems = [
-                {
-                    id: 'youtab',
-                    name: 'Стриминг на YouTab',
-                    desc: 'Стриминг платформа',
-                    baseSubsPrice: 100,
-                    baseCashPrice: 0,
-                    subsPerSec: 0,
-                    cashPerSec: 0.01,
-                    clickBonus: 1,
-                    multiplierTarget: null,
-                    count: 0,
-                    maxLevel: Infinity
-                },
-                {
-                    id: 'tegigram',
-                    name: 'Посты в Tegigram',
-                    desc: 'Весёлые нарезки',
-                    baseSubsPrice: 500,
-                    baseCashPrice: 0.25,
-                    subsPerSec: 0.5,
-                    cashPerSec: 0.05,
-                    clickBonus: 0,
-                    multiplierTarget: null,
-                    count: 0,
-                    maxLevel: Infinity
-                },
-                {
-                    id: 'kiktotk',
-                    name: 'Ролики в KikTotk',
-                    desc: 'Короткие ролики',
-                    baseSubsPrice: 1000,
-                    baseCashPrice: 2,
-                    subsPerSec: 5,
-                    cashPerSec: 0.1,
-                    clickBonus: 0,
-                    multiplierTarget: null,
-                    count: 0,
-                    maxLevel: Infinity
-                },
-                {
-                    id: 'cosplay',
-                    name: 'Косплей-стримы',
-                    desc: 'Усиливает YouTab',
-                    baseSubsPrice: 2000,
-                    baseCashPrice: 10,
-                    subsPerSec: 0,
-                    cashPerSec: 0,
-                    clickBonus: 10,
-                    multiplierTarget: 'youtab',
-                    multiplierValue: 0.25,
-                    count: 0,
-                    maxLevel: Infinity
-                },
-                {
-                    id: 'spofifi',
-                    name: 'Треки в Spofifi',
-                    desc: 'Музыкальные записи',
-                    baseSubsPrice: 5000,
-                    baseCashPrice: 50,
-                    subsPerSec: 0,
-                    cashPerSec: 1,
-                    clickBonus: 0,
-                    multiplierTarget: null,
-                    count: 0,
-                    maxLevel: Infinity
-                }
+                { id: 'youtab', name: 'Стриминг', desc: 'Стриминг платформа', baseSubsPrice: 100, baseCashPrice: 0, subsPerSec: 0, cashPerSec: 0.01, clickBonus: 1, multiplierTarget: null, count: 0, maxLevel: Infinity },
+                { id: 'tegigram', name: 'Посты', desc: 'Весёлые нарезки', baseSubsPrice: 500, baseCashPrice: 0.25, subsPerSec: 0.5, cashPerSec: 0.05, clickBonus: 0, multiplierTarget: null, count: 0, maxLevel: Infinity },
+                { id: 'kiktotk', name: 'Ролики', desc: 'Короткие ролики', baseSubsPrice: 1000, baseCashPrice: 2, subsPerSec: 5, cashPerSec: 0.1, clickBonus: 0, multiplierTarget: null, count: 0, maxLevel: Infinity },
+                { id: 'cosplay', name: 'Косплей', desc: 'Усиливает YouTab', baseSubsPrice: 2000, baseCashPrice: 10, subsPerSec: 0, cashPerSec: 0, clickBonus: 10, multiplierTarget: 'youtab', multiplierValue: 0.25, count: 0, maxLevel: Infinity },
+                { id: 'spofifi', name: 'Треки', desc: 'Музыка', baseSubsPrice: 5000, baseCashPrice: 50, subsPerSec: 0, cashPerSec: 1, clickBonus: 0, multiplierTarget: null, count: 0, maxLevel: Infinity }
             ];
 
-            // ============ ОБРАЗЫ ПЕРСОНАЖА ============
             const skins = [
                 { id: 'default', name: 'Классика', emoji: '🎭', bonus: 1.0, price: 0, owned: true },
                 { id: 'cyber', name: 'Кибер', emoji: '👾', bonus: 1.1, price: 50, owned: false },
-                { id: 'vampire', name: 'Стример-вампир', emoji: '🧛', bonus: 1.15, price: 100, owned: false },
+                { id: 'vampire', name: 'Вампир', emoji: '🧛', bonus: 1.15, price: 100, owned: false },
                 { id: 'robot', name: 'Робо', emoji: '🤖', bonus: 1.2, price: 200, owned: false },
-                { id: 'angel', name: 'Ангел эфира', emoji: '👼', bonus: 1.3, price: 500, owned: false },
-                { id: 'demon', name: 'Демон стрима', emoji: '😈', bonus: 1.4, price: 1000, owned: false }
+                { id: 'angel', name: 'Ангел', emoji: '👼', bonus: 1.3, price: 500, owned: false },
+                { id: 'demon', name: 'Демон', emoji: '😈', bonus: 1.4, price: 1000, owned: false }
             ];
 
             let currentSkin = skins[0];
             const SAVE_KEY = 'glestream_save';
 
-            // ============ ЦЕНЫ КОНТЕНТА ============
+            // ============ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ============
+            
+            // Форматирование чисел (только для визуала)
+            function formatNum(num) {
+                if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+                if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+                if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+                return Math.floor(num);
+            }
+
             function getContentPrice(content) {
                 let subsPrice = Math.floor(content.baseSubsPrice * Math.pow(1.8, content.count));
                 let cashPrice = Math.floor(content.baseCashPrice * Math.pow(1.6, content.count) * 100) / 100;
                 return { subs: subsPrice, cash: cashPrice };
             }
 
-            // ============ СТОИМОСТЬ ПРЕСТИЖА ============
             function getPrestigeCost() {
                 if (prestigeLevel >= contentUnlocks.length - 1) return Infinity;
                 const nextContent = contentUnlocks[prestigeLevel + 1];
                 return nextContent ? nextContent.subsReq : Infinity;
             }
 
-            // ============ СЛЕДУЮЩИЙ ФОРМАТ ============
             function getNextContentName() {
                 if (prestigeLevel >= contentUnlocks.length - 1) return "Все форматы";
                 return contentUnlocks[prestigeLevel + 1].name;
             }
 
-            // ============ ПЕРЕСЧЁТ ПАССИВНОГО ДОХОДА ============
+            // ============ ВИЗУАЛЬНЫЕ ЭФФЕКТЫ (NEW) ============
+            
+            function createFloatingNumber(value) {
+                const container = document.getElementById('floatingContainer');
+                const numEl = document.createElement('div');
+                numEl.className = 'float-text';
+                numEl.innerText = '+' + formatNum(value);
+                
+                // Случайная позиция по горизонтали
+                const randomX = Math.random() * 80 + 10; // от 10% до 90%
+                numEl.style.left = randomX + '%';
+                numEl.style.top = '40%';
+                
+                container.appendChild(numEl);
+                
+                setTimeout(() => {
+                    numEl.remove();
+                }, 800);
+            }
+
+            // ============ ЛОГИКА ИГРЫ (Не менялась) ============
+            
             function recalcPassiveIncome() {
                 let totalCash = 0;
                 let totalSubs = 0;
                 
                 contentItems.forEach(content => {
-                    // Базовый доход
                     totalCash += content.cashPerSec * content.count * globalBonus;
                     totalSubs += content.subsPerSec * content.count * globalBonus;
-                    
-                    // Специальные мультипликаторы
-                    if (content.multiplierTarget) {
-                        const target = contentItems.find(c => c.id === content.multiplierTarget);
-                        if (target) {
-                            // Не добавляем в доход напрямую, обрабатываем отдельно
-                        }
-                    }
                 });
 
-                // Усиление от косплея для YouTab
                 const cosplay = contentItems.find(c => c.id === 'cosplay');
                 const youtab = contentItems.find(c => c.id === 'youtab');
                 if (cosplay && youtab && cosplay.count > 0) {
@@ -951,40 +853,21 @@ body {
 
                 passiveCashPerSec = totalCash;
                 passiveSubsPerSec = totalSubs;
-                
                 updatePassiveDisplay();
             }
 
-            function optimizeForDevice() {
-                const isAndroid = /Android/i.test(navigator.userAgent);
-                const isSmallScreen = window.innerWidth <= 380;
-                
-                if (isAndroid) {
-                    // Дополнительные фиксы для Android
-                    document.documentElement.style.setProperty('--tap-highlight', 'transparent');
-                    
-                    // Фикс скролла в модалке
-                    const modal = document.getElementById('characterModal');
-                    if (modal) {
-                        modal.style.overflowY = 'auto';
-                        modal.style.webkitOverflowScrolling = 'touch';
-                    }
-                }
-                
-                if (isSmallScreen) {
-                    // Уменьшаем отступы
-                    document.querySelectorAll('.content-item').forEach(el => {
-                        el.style.padding = '10px';
-                    });
-                }
-            }
-            // ============ ОБНОВЛЕНИЕ ДИСПЛЕЯ ============
-            function updatePassiveDisplay() {
-                const totalPassiveCash = passiveCashPerSec;
-                document.getElementById('perSecondDisplay').innerHTML = `+${totalPassiveCash.toFixed(2)} $/сек`;
+            function recalcClickPower() {
+                let baseClick = 1;
+                const clickBonus = contentItems.reduce((sum, content) => {
+                    return sum + (content.clickBonus * content.count);
+                }, 0);
+                clickPower = baseClick + clickBonus;
             }
 
-            // ============ СОХРАНЕНИЕ ============
+            function updatePassiveDisplay() {
+                document.getElementById('perSecondDisplay').innerHTML = `+${passiveCashPerSec.toFixed(2)} $/сек`;
+            }
+
             function saveGame() {
                 const saveData = {
                     subscribers, cash, gems, prestigeLevel,
@@ -997,7 +880,6 @@ body {
                 localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
             }
 
-            // ============ ЗАГРУЗКА ============
             function loadGame() {
                 const saved = localStorage.getItem(SAVE_KEY);
                 if (!saved) return false;
@@ -1045,19 +927,16 @@ body {
                 }
             }
 
-            // ============ ПРЕСТИЖ - НОВЫЙ ФОРМАТ ============
             function performPrestige() {
                 const cost = getPrestigeCost();
                 if (prestigeLevel < contentUnlocks.length - 1 && subscribers >= cost) {
                     subscribers -= cost;
                     prestigeLevel++;
                     
-                    // Разблокируем новый формат
                     if (prestigeLevel < contentUnlocks.length) {
                         contentUnlocks[prestigeLevel].unlocked = true;
                     }
                     
-                    // Даём Гле-лмазы
                     gems += 25 + (prestigeLevel * 10);
                     
                     recalcPassiveIncome();
@@ -1066,12 +945,10 @@ body {
                 }
             }
 
-            // ============ ПОКУПКА КОНТЕНТА ============
             function purchaseContent(contentId) {
                 const content = contentItems.find(c => c.id === contentId);
                 if (!content) return;
                 
-                // Проверка разблокирован ли формат
                 const unlock = contentUnlocks.find(u => u.id === contentId);
                 if (unlock && !unlock.unlocked) return;
                 
@@ -1087,7 +964,6 @@ body {
                 }
             }
 
-            // ============ ПОКУПКА ОБРАЗА ============
             function purchaseSkin(skinId) {
                 const skin = skins.find(s => s.id === skinId);
                 if (!skin || skin.owned || gems < skin.price) return;
@@ -1100,14 +976,12 @@ body {
                 saveGame();
             }
 
-            // ============ ВЫБОР ОБРАЗА ============
             function selectSkin(skinId) {
                 const skin = skins.find(s => s.id === skinId);
                 if (skin && skin.owned) {
                     currentSkin = skin;
                     globalBonus = skin.bonus;
                     
-                    // Обновляем аватар
                     document.getElementById('avatarEmoji').innerText = skin.emoji;
                     document.getElementById('modalAvatar').innerText = skin.emoji;
                     document.getElementById('characterName').innerText = `${skin.name} Глеб`;
@@ -1119,7 +993,53 @@ body {
                 }
             }
 
-            // ============ РЕНДЕР МОДАЛКИ ============
+            function handleClick() {
+                // Логика
+                subscribers += clickPower * globalBonus + clickBonus;
+                
+                // Визуал
+                createFloatingNumber(clickPower);
+                
+                renderGame();
+                saveGame();
+            }
+
+            function idleTick() {
+                let cashGain = passiveCashPerSec;
+                let subsGain = passiveSubsPerSec;
+                
+                if (cashGain > 0) cash += cashGain;
+                if (subsGain > 0) subscribers += subsGain;
+                
+                renderGame();
+            }
+
+            function resetGame() {
+                if (!confirm('🚨 ТОЧНО СБРОСИТЬ?\n\nВсе подписчики, доллары, Гле-лмазы, уровни контента и образы будут удалены навсегда!')) return;
+                if (!confirm('😱 Последнее предупреждение!\n\nВы уверены, что хотите начать с нуля?')) return;
+                
+                subscribers = 0; cash = 0; gems = 0; prestigeLevel = 0; globalBonus = 1.0; clickPower = 1;
+                contentItems.forEach(c => c.count = 0);
+                contentUnlocks.forEach((u, i) => u.unlocked = i === 0);
+                skins.forEach((s, i) => s.owned = i === 0);
+                currentSkin = skins[0];
+                globalBonus = currentSkin.bonus;
+                
+                document.getElementById('avatarEmoji').innerText = currentSkin.emoji;
+                document.getElementById('modalAvatar').innerText = currentSkin.emoji;
+                document.getElementById('characterName').innerText = `${currentSkin.name} Глеб`;
+                document.getElementById('characterBonus').innerHTML = `+${((currentSkin.bonus - 1) * 100).toFixed(0)}% к доходу`;
+                
+                recalcPassiveIncome();
+                recalcClickPower();
+                renderGame();
+                renderModal();
+                localStorage.removeItem(SAVE_KEY);
+                alert('✅ Прогресс сброшен.');
+            }
+
+            // ============ РЕНДЕР ============
+
             function renderModal() {
                 document.getElementById('modalGems').innerText = gems;
                 
@@ -1130,8 +1050,8 @@ body {
                              onclick="window.selectSkinHandler('${skin.id}')"
                              ${!skin.owned ? `onclick="window.purchaseSkinHandler('${skin.id}')"` : ''}>
                             <span class="skin-icon">${skin.emoji}</span>
-                            <span style="color:#e0e0e0; font-size:12px;">${skin.name}</span>
-                            ${skin.owned ? '<span style="color:#ffd700;">✓</span>' : 
+                            <span class="skin-name">${skin.name}</span>
+                            ${skin.owned ? '<span style="color:var(--accent-green); font-size:10px;">✓</span>' : 
                                 `<span class="skin-price">💎 ${skin.price}</span>`}
                         </div>
                     `;
@@ -1139,21 +1059,18 @@ body {
                 document.getElementById('skinsContainer').innerHTML = skinsHtml;
             }
 
-            // ============ РЕНДЕР ИГРЫ ============
             function renderGame() {
-                document.getElementById('subsDisplay').innerText = Math.floor(subscribers);
+                document.getElementById('subsDisplay').innerText = formatNum(Math.floor(subscribers));
                 document.getElementById('cashDisplay').innerText = cash.toFixed(1);
                 document.getElementById('gemsDisplay').innerText = gems;
                 
                 updatePassiveDisplay();
                 
-                // Престиж кнопка
                 const prestigeCost = getPrestigeCost();
                 document.getElementById('prestigeCostDisplay').innerHTML = `${prestigeCost.toLocaleString()} 👥`;
                 document.getElementById('nextContentPreview').innerHTML = `→ ${getNextContentName()}`;
                 document.getElementById('prestigeButton').disabled = subscribers < prestigeCost || prestigeLevel >= contentUnlocks.length - 1;
                 
-                // Отрисовка контента
                 let html = '';
                 contentItems.forEach(content => {
                     const unlock = contentUnlocks.find(u => u.id === content.id);
@@ -1165,10 +1082,10 @@ body {
                     let effects = [];
                     if (content.cashPerSec > 0) effects.push(`+${content.cashPerSec * globalBonus} $/сек`);
                     if (content.subsPerSec > 0) effects.push(`+${content.subsPerSec * globalBonus} 👥/сек`);
-                    if (content.clickBonus > 0) effects.push(`+${content.clickBonus} 👥 за клик`);
+                    if (content.clickBonus > 0) effects.push(`+${content.clickBonus} 👥 клик`);
                     if (content.multiplierTarget) {
                         const target = contentItems.find(c => c.id === content.multiplierTarget);
-                        effects.push(`x${1 + content.count * content.multiplierValue} к ${target?.name}`);
+                        effects.push(`x${1 + content.count * content.multiplierValue} ${target?.name || ''}`);
                     }
                     
                     html += `
@@ -1185,9 +1102,8 @@ body {
                             <button class="content-price" 
                                     data-content-id="${content.id}"
                                     ${!canAfford ? 'disabled' : ''}>
-                                 ${price.subs} 👥
-                                ${price.cash > 0 ? `<br><span class="price-small">$${price.cash.toFixed(2)}</span>` : ''}
-                                <span class="price-small">улучшить</span>
+                                ${formatNum(price.subs)} 👥
+                                ${price.cash > 0 ? `<span class="price-small">$${price.cash.toFixed(2)}</span>` : ''}
                             </button>
                         </div>
                     `;
@@ -1195,128 +1111,26 @@ body {
                 
                 document.getElementById('contentContainer').innerHTML = html;
                 
-                // Обработчики контента
+                // Re-attach listeners
                 contentItems.forEach(content => {
                     const button = document.querySelector(`button[data-content-id="${content.id}"]`);
                     if (button) {
-                        button.removeEventListener('click', contentHandler);
-                        button.addEventListener('click', contentHandler);
+                        button.onclick = (e) => {
+                            e.preventDefault();
+                            purchaseContent(content.id);
+                        };
                     }
                 });
             }
 
-            // ============ ОБРАБОТЧИКИ ============
-            function contentHandler(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const contentId = e.currentTarget.dataset.contentId;
-                purchaseContent(contentId);
-            }
-
-            function recalcClickPower() {
-                let baseClick = 1; // Базовый +1 подписчик
-                
-                // Суммируем все бонусы клика от контента
-                const clickBonus = contentItems.reduce((sum, content) => {
-                    return sum + (content.clickBonus * content.count);
-                }, 0);
-                
-                clickPower = baseClick + clickBonus;
-            }
-
-            function handleClick() {
-                subscribers += clickPower * globalBonus + clickBonus;
-                renderGame();
-                saveGame();
-            }
-
-            function idleTick() {
-                let cashGain = passiveCashPerSec;
-                let subsGain = passiveSubsPerSec;
-                
-                if (cashGain > 0) cash += cashGain;
-                if (subsGain > 0) subscribers += subsGain;
-                
-                renderGame();
-            }
-
-            function resetGame() {
-                // Модальное окно подтверждения
-                if (!confirm('🚨 ТОЧНО СБРОСИТЬ?\n\nВсе подписчики, доллары, Гле-лмазы, уровни контента и образы будут удалены навсегда!')) {
-                    return;
-                }
-                
-                // Двойное подтверждение для безопасности
-                if (!confirm('😱 Последнее предупреждение!\n\nВы уверены, что хотите начать с нуля?')) {
-                    return;
-                }
-                
-                // ===== СБРАСЫВАЕМ ВСЁ =====
-                
-                // 1. Ресурсы
-                subscribers = 0;
-                cash = 0;
-                gems = 0;
-                prestigeLevel = 0;
-                globalBonus = 1.0;
-                clickPower = 1;
-                
-                // 2. Контент (обнуляем уровни)
-                contentItems.forEach(content => {
-                    content.count = 0;
-                });
-                
-                // 3. Форматы (оставляем только YouTab)
-                contentUnlocks.forEach((unlock, index) => {
-                    unlock.unlocked = index === 0; // Только первый разблокирован
-                });
-                
-                // 4. Скины (оставляем только базовый)
-                skins.forEach((skin, index) => {
-                    skin.owned = index === 0; // Только первый owned
-                });
-                
-                // 5. Текущий образ
-                currentSkin = skins[0];
-                globalBonus = currentSkin.bonus;
-                
-                // 6. Обновляем интерфейс
-                document.getElementById('avatarEmoji').innerText = currentSkin.emoji;
-                document.getElementById('modalAvatar').innerText = currentSkin.emoji;
-                document.getElementById('characterName').innerText = `${currentSkin.name} Глеб`;
-                document.getElementById('characterBonus').innerHTML = `+${((currentSkin.bonus - 1) * 100).toFixed(0)}% к доходу`;
-                
-                // 7. Пересчёт всего
-                recalcPassiveIncome();
-                recalcClickPower();
-                
-                // 8. Рендер
-                renderGame();
-                renderModal();
-                
-                // 9. Удаляем сохранение
-                localStorage.removeItem(SAVE_KEY);
-                
-                // 10. Визуальный фидбек
-                alert('✅ Прогресс сброшен. Удачи заново!');
-                
-                // Хептик если есть
-                if (window.Telegram?.WebApp?.HapticFeedback) {
-                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-                }
-            }
             // ============ ИНИЦИАЛИЗАЦИЯ ============
             window.addEventListener('load', () => {
-                // Telegram
                 if (window.Telegram?.WebApp) {
                     Telegram.WebApp.ready();
                     Telegram.WebApp.expand();
-                    recalcClickPower()
                 }
                 
-                // Загрузка
                 if (!loadGame()) {
-                    // Стартовые значения
                     contentUnlocks[0].unlocked = true;
                 }
                 
@@ -1324,14 +1138,9 @@ body {
                 renderGame();
                 renderModal();
                 
-                // Клик кнопка - ТОЛЬКО ОДИН ОБРАБОТЧИК!
-                const clickBtn = document.getElementById('clickButton');
-                clickBtn.addEventListener('click', handleClick);
-                
-                // Престиж
+                document.getElementById('clickButton').addEventListener('click', handleClick);
                 document.getElementById('prestigeButton').addEventListener('click', performPrestige);
                 
-                // Персонаж - модалка
                 document.getElementById('characterButton').addEventListener('click', () => {
                     renderModal();
                     document.getElementById('characterModal').classList.add('active');
@@ -1340,20 +1149,15 @@ body {
                 document.getElementById('closeModalBtn').addEventListener('click', () => {
                     document.getElementById('characterModal').classList.remove('active');
                 });
-                 document.addEventListener('click', function(e) {
-                    if (e.target.id === 'resetGameBtn') {
-                        resetGame();
-                    }
-                });
                 
-                // Глобальные обработчики для скинов
+                document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+                
                 window.selectSkinHandler = selectSkin;
                 window.purchaseSkinHandler = (skinId) => {
                     purchaseSkin(skinId);
                     renderModal();
                 };
                 
-                // Idle тик
                 setInterval(idleTick, 1000);
                 setInterval(saveGame, 30000);
             });
